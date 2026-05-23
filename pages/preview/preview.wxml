@@ -6,7 +6,7 @@
     </view>
   </view>
 
-  <scroll-view class="photos" scroll-y>
+  <scroll-view class="photos" scroll-y show-scrollbar="{{false}}" enhanced="{{true}}">
     <view class="photo-card portrait-card" bindtap="previewPortrait">
       <image class="photo portrait-photo" src="{{portraitPath}}" mode="aspectFit" />
       <view class="photo-tag">竖屏</view>
