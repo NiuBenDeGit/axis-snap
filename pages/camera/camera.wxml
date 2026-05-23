@@ -1,0 +1,51 @@
+<view class="page">
+  <!-- 全屏相机 -->
+  <camera
+    id="camera"
+    class="camera"
+    device-position="back"
+    flash="{{flash}}"
+    binderror="onCameraError"
+  />
+
+  <!-- 横屏预览可拖动小框 -->
+  <movable-area class="movable-area">
+    <movable-view
+      class="crop-box"
+      direction="all"
+      x="{{cropBox.x}}"
+      y="{{cropBox.y}}"
+      style="width: {{cropBox.width}}rpx; height: {{cropBox.height}}rpx;"
+      bindchange="onCropBoxChange"
+      bindscale="onCropBoxScale"
+    >
+      <view class="crop-border">
+        <text class="crop-label">横屏</text>
+      </view>
+    </movable-view>
+  </movable-area>
+
+  <!-- 底部控制栏 -->
+  <view class="controls">
+    <!-- 闪光灯 -->
+    <view class="flash-btn" bindtap="toggleFlash">
+      <text class="flash-icon">{{flashIcon}}</text>
+    </view>
+
+    <!-- 快门 -->
+    <view class="shutter-btn" bindtap="takePhoto">
+      <view class="shutter-inner" />
+    </view>
+
+    <!-- 占位，保持快门居中 -->
+    <view class="placeholder" />
+  </view>
+</view>
+
+<!-- 离屏裁剪 Canvas（不可见） -->
+<canvas
+  type="2d"
+  id="cropCanvas"
+  class="crop-canvas"
+  style="width: {{canvasWidth}}px; height: {{canvasHeight}}px;"
+/>
