@@ -16,6 +16,7 @@
       x="{{cropBox.x}}"
       y="{{cropBox.y}}"
       style="width: {{cropBox.width}}rpx; height: {{cropBox.height}}rpx;"
+      scale="{{true}}"
       bindchange="onCropBoxChange"
       bindscale="onCropBoxScale"
     >
