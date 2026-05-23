@@ -62,6 +62,10 @@ Page({
 
   takePhoto() {
     if (this.data.loading) return
+    if (!this.cameraCtx) {
+      wx.showToast({ title: '相机未就绪', icon: 'none' })
+      return
+    }
     this.setData({ loading: true })
 
     this.cameraCtx.takePhoto({
@@ -71,13 +75,12 @@ Page({
 
         try {
           const landscapePath = await this.doPortraitCrop(portraitPath)
-          this.setData({ loading: false })
-
-          const portraitEncoded = encodeURIComponent(portraitPath)
-          const landscapeEncoded = encodeURIComponent(landscapePath)
-          wx.navigateTo({
-            url: `/pages/preview/preview?portrait=${portraitEncoded}&landscape=${landscapeEncoded}`
-          })
+          // 通过 globalData 传递，避免 URL 参数超长
+          app.globalData.previewImages = {
+            portrait: portraitPath,
+            landscape: landscapePath
+          }
+          wx.navigateTo({ url: '/pages/preview/preview' })
         } catch (err) {
           this.setData({ loading: false })
           console.error('裁剪失败:', err)
