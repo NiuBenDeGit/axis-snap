@@ -1,3 +1,4 @@
+const NAV_BACK_DELAY = 1500
 const app = getApp()
 
 Page({
@@ -42,15 +43,18 @@ Page({
 
     this.checkAlbumPermission()
       .then(() => {
-        return Promise.all([
-          this.saveImage(this.data.portraitPath),
-          this.saveImage(this.data.landscapePath)
-        ])
+        const tasks = [this.data.portraitPath, this.data.landscapePath]
+          .filter(p => p)
+          .map(p => this.saveImage(p))
+        if (tasks.length === 0) {
+          throw new Error('无图片可保存')
+        }
+        return Promise.all(tasks)
       })
       .then(() => {
         wx.hideLoading()
         wx.showToast({ title: '已保存到相册', icon: 'success' })
-        setTimeout(() => wx.navigateBack(), 1500)
+        setTimeout(() => wx.navigateBack(), NAV_BACK_DELAY)
       })
       .catch((err) => {
         wx.hideLoading()
@@ -77,13 +81,21 @@ Page({
       wx.getSetting({
         success: (res) => {
           if (res.authSetting['scope.writePhotosAlbum'] === false) {
+            console.warn('[AxisSnap] 用户已拒绝相册权限')
             reject('denied')
+            return
+          }
+          if (res.authSetting['scope.writePhotosAlbum'] === true) {
+            resolve()
             return
           }
           wx.authorize({
             scope: 'scope.writePhotosAlbum',
             success: resolve,
-            fail: () => reject('denied')
+            fail: () => {
+              console.warn('[AxisSnap] 相册权限授权失败')
+              reject('denied')
+            }
           })
         },
         fail: reject
