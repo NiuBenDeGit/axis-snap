@@ -20,6 +20,10 @@ Page({
     errorMsg: ''
   },
 
+  onShow() {
+    this.setData({ loading: false })
+  },
+
   onReady() {
     try {
       this.cameraCtx = wx.createCameraContext()

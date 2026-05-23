@@ -1,6 +1,8 @@
 /**
  * 将屏幕上的小框坐标映射为原图上的裁剪像素坐标
- * @param {Object} box - 小框信息 { x, y, width, height } 单位 rpx
+ * movable-view 的 x/y 来自 bindchange 事件，单位已是 px
+ * movable-view 的 width/height 通过 style 设置，单位是 rpx
+ * @param {Object} box - 小框信息 { x(px), y(px), width(rpx), height(rpx) }
  * @param {Object} screen - 图片显示区域尺寸 { width, height } 单位 px，非设备屏幕尺寸
  * @param {Object} image - 图片信息 { width, height } 单位 px
  * @returns {Object} { x, y, width, height } 像素坐标
@@ -17,9 +19,10 @@ function mapCropCoords(box, screen, image) {
   }
 
   const ratio = 750 / screen.width
+  // x/y 已是 px（来自 movable-view bindchange），width/height 是 rpx 需转换
   const boxPx = {
-    x: Math.max(0, box.x / ratio),
-    y: Math.max(0, box.y / ratio),
+    x: Math.max(0, box.x),
+    y: Math.max(0, box.y),
     width: box.width / ratio,
     height: box.height / ratio
   }
