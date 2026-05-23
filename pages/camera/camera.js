@@ -58,5 +58,69 @@ Page({
       'cropBox.width': Math.round(this.data.baseCropWidth * e.detail.x),
       'cropBox.height': Math.round(this.data.baseCropHeight * e.detail.y)
     })
+  },
+
+  takePhoto() {
+    if (this.data.loading) return
+    this.setData({ loading: true })
+
+    this.cameraCtx.takePhoto({
+      quality: 'high',
+      success: async (res) => {
+        const portraitPath = res.tempImagePath
+
+        try {
+          const landscapePath = await this.doPortraitCrop(portraitPath)
+          this.setData({ loading: false })
+
+          const portraitEncoded = encodeURIComponent(portraitPath)
+          const landscapeEncoded = encodeURIComponent(landscapePath)
+          wx.navigateTo({
+            url: `/pages/preview/preview?portrait=${portraitEncoded}&landscape=${landscapeEncoded}`
+          })
+        } catch (err) {
+          this.setData({ loading: false })
+          console.error('裁剪失败:', err)
+          wx.showToast({ title: '处理失败，请重试', icon: 'none' })
+        }
+      },
+      fail: (err) => {
+        this.setData({ loading: false })
+        console.error('拍照失败:', err)
+        wx.showToast({ title: '拍照失败，请重试', icon: 'none' })
+      }
+    })
+  },
+
+  doPortraitCrop(portraitPath) {
+    return new Promise((resolve, reject) => {
+      wx.getImageInfo({
+        src: portraitPath,
+        success: (imgInfo) => {
+          const screenInfo = app.globalData.systemInfo
+          const cropRect = mapCropCoords(
+            this.data.cropBox,
+            { width: screenInfo.windowWidth, height: screenInfo.windowHeight },
+            { width: imgInfo.width, height: imgInfo.height }
+          )
+
+          const outputSize = {
+            width: this.data.canvasWidth,
+            height: this.data.canvasHeight
+          }
+
+          cropLandscape(portraitPath, cropRect, outputSize)
+            .then(resolve)
+            .catch(reject)
+        },
+        fail: reject
+      })
+    })
+  },
+
+  onCameraError(e) {
+    console.error('相机错误:', e.detail)
+    this.setData({ error: true, errorMsg: '相机启动失败' })
+    wx.showToast({ title: '相机启动失败', icon: 'none' })
   }
 })
