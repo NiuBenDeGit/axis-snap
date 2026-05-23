@@ -1,0 +1,91 @@
+.page {
+  width: 100%;
+  height: 100%;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-bar {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  padding-top: env(safe-area-inset-top);
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+}
+
+.back-icon {
+  color: #fff;
+  font-size: 36rpx;
+  margin-right: 10rpx;
+}
+
+.back-text {
+  color: #fff;
+  font-size: 28rpx;
+}
+
+.photos {
+  flex: 1;
+  padding: 20rpx 30rpx;
+}
+
+.photo-card {
+  position: relative;
+  margin-bottom: 30rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+
+.portrait-card {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+}
+
+.landscape-card {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-tag {
+  position: absolute;
+  top: 16rpx;
+  left: 16rpx;
+  background: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 6rpx;
+}
+
+.save-bar {
+  padding: 30rpx 60rpx;
+  padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
+}
+
+.save-btn {
+  width: 100%;
+  height: 90rpx;
+  line-height: 90rpx;
+  text-align: center;
+  background: #07c160;
+  color: #fff;
+  font-size: 32rpx;
+  border-radius: 12rpx;
+  border: none;
+}
+
+.save-btn::after {
+  border: none;
+}
