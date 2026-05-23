@@ -1,0 +1,11 @@
+{
+  "pages": [
+    "pages/camera/camera",
+    "pages/preview/preview"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundTextStyle": "dark"
+  },
+  "sitemapLocation": "sitemap.json"
+}
